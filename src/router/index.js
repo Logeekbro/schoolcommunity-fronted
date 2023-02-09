@@ -108,7 +108,13 @@ const routes = [
     name: 'admin',
     path: '/admin',
     component: () => import('@/views/admin/AdminIndex'),
-    meta: {title: '管理页面', requireAuth: true, requireAdmin:true}
+    meta: {title: '文章管理页面', requireAuth: true, requireAdmin:true}
+  },
+  {
+    name: 'permission',
+    path: '/admin/permission',
+    component: () => import('@/views/admin/Permission'),
+    meta: {title: '权限管理页面', requireAuth: true, requireAdmin:false}
   },
   {
     path: "/404",

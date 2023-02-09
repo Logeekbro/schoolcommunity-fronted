@@ -15,13 +15,16 @@ export function login(data) {
   return request({
     url: '/oauth/token',
     method: 'post',
-    data: data
+    data: {
+      username: data.account,
+      password: data.password
+    }
   })
 }
 // 登录后获取前台用户信息
 export function getUserInfo() {
   return request({
-    url: '/user/info',
+    url: '/user/info/basic',
     method: 'get',
   })
 }

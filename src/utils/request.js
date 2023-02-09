@@ -25,6 +25,8 @@ service.interceptors.request.use(
       // config.headers.token = token;       // 如果要求携带在请求头中
       // bearer：w3c规范
       config.headers['Authorization'] = "Bearer " + getToken()
+    } else {
+      config.headers['Authorization'] = "Basic YnJvd3Nlcl9jbGllbnQ6MTIzNDU2"
     }
     if(getVerifyToken()) {
       config.headers['VerifyToken'] = getVerifyToken()
