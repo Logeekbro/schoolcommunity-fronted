@@ -1,10 +1,10 @@
 <template>
-  <el-card>
+  <!-- <el-card> -->
     <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
       <el-tab-pane label="权限管理" name="first">
         <a-table :columns="columns" :data-source="data" bordered>
           <template slot="id" slot-scope="text, record">
-            <a-checkbox v-if="record.editable" @change="changeUserDefault" :checked="isUserDefault"> 用户默认权限 </a-checkbox>
+            <a-checkbox v-if="record.key === 'add' && record.editable" @change="changeUserDefault" :checked="isUserDefault"> 用户默认权限 </a-checkbox>
             <span v-else>{{ text }}</span>
           </template>
           <template
@@ -40,9 +40,9 @@
                   >编辑</a
                 >
 
-                <a :disabled="editingKey !== ''" @click="() => edit(record.key)"
-                  >删除</a
-                >
+                <a :disabled="editingKey !== ''" @click="() => doDelete(record.key)"
+                  >删除
+                </a>
               </span>
             </div>
           </template>
@@ -53,13 +53,13 @@
           </template>
         </a-table>
       </el-tab-pane>
-      <el-tab-pane label="角色管理" name="second"> 角色管理 </el-tab-pane>
+      <el-tab-pane label="角色管理" name="second"> 开发中... </el-tab-pane>
     </el-tabs>
-  </el-card>
+  <!-- </el-card> -->
 </template>
 
 <script>
-import { getAllPermission, addPermission } from "@/api/permission";
+import { getAllPermission, addPermission, updatePermission, deletePermissionById } from "@/api/permission";
 
 const columns = [
   {
@@ -106,6 +106,7 @@ export default {
   },
   methods: {
     getPermissions() {
+      this.editingKey = "";
       getAllPermission().then((rep) => {
         const data = rep.data;
         this.data = data.map((item) => {
@@ -134,7 +135,7 @@ export default {
     },
     save(key) {
       const newData = [...this.data];
-      const newCacheData = [...this.cacheData];
+      // const newCacheData = [...this.cacheData];
       const target = newData.find((item) => key === item.key);
       if (key === "add") {
         // 向服务器发送请求添加权限
@@ -146,17 +147,26 @@ export default {
         addPermission(permission).then(rep => {
             this.msg.success("添加成功")
             this.getPermissions()
-            this.editingKey = "";
+        })
+      } else {
+        const permission = {
+            id: target.key,
+            name: target.name,
+            urlPerm: target.urlPerm,
+        }
+        updatePermission(permission).then(rep => {
+          this.msg.success("修改成功")
+          this.getPermissions()
         })
       }
-      const targetCache = newCacheData.find((item) => key === item.key);
-      if (target && targetCache) {
-        delete target.editable;
-        this.data = newData;
-        Object.assign(targetCache, target);
-        this.cacheData = newCacheData;
-      }
-      this.editingKey = "";
+      // const targetCache = newCacheData.find((item) => key === item.key);
+      // if (target && targetCache) {
+      //   delete target.editable;
+      //   this.data = newData;
+      //   Object.assign(targetCache, target);
+      //   this.cacheData = newCacheData;
+      // }
+      // this.editingKey = "";
       
     },
     cancel(key) {
@@ -176,6 +186,12 @@ export default {
         delete target.editable;
         this.data = newData;
       }
+    },
+    doDelete(key){
+      deletePermissionById(key).then(rep => {
+        this.msg.success("删除成功")
+        this.getPermissions()
+      })
     },
     handleAdd() {
       const { data } = this;
