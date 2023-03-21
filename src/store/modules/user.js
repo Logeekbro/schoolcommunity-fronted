@@ -1,6 +1,7 @@
 import { getUserInfo, login, logout } from "@/api/auth/auth";
 import { getToken, setToken, setTokenTemp, removeToken } from "@/utils/auth";
 import { getUserRoleIdList } from "@/api/permission";
+import { getBasicInfo } from "@/api/user";
 import { removeViewCache } from '@/utils/view-cache'
 
 const state = {
@@ -55,7 +56,7 @@ const actions = {
   // 获取用户信息
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getUserInfo()
+      getBasicInfo()
         .then(async (response) => {
           const { data } = response;
           if (!data) {
@@ -65,8 +66,8 @@ const actions = {
             resolve();
             reject("Verification failed, please Login again.");
           }
-          const rep = await getUserRoleIdList()
-          data.roleIdList = rep.data
+          // const rep = await getUserRoleIdList()
+          // data.roleIdList = rep.data
           data.avatar +=  "?" + state.avatarTS
           commit("SET_USER_STATE", data);
           resolve(data);

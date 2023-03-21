@@ -36,12 +36,12 @@
                 </a-popconfirm>
               </span>
               <span v-else>
-                <a :disabled="editingKey !== ''" @click="() => edit(record.key)"
-                  >编辑</a
-                >
+                <a :disabled="editingKey !== ''" @click="() => edit(record.key)">
+                  编辑
+                </a>
 
-                <a :disabled="editingKey !== ''" @click="() => doDelete(record.key)"
-                  >删除
+                <a :disabled="editingKey !== ''" @click="() => doDelete(record.key)">
+                  删除
                 </a>
               </span>
             </div>

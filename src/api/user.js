@@ -11,6 +11,14 @@ export function getOpenInfo(userId){
   })
 }
 
+// 用户基础信息
+export function getBasicInfo(){
+  return request({
+    url: `/user/info/basic`,
+    method: 'get',
+  })
+}
+
 // 用户关注列表
 export function getFollows(userId){
   return request({

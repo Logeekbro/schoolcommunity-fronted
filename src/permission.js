@@ -23,7 +23,7 @@ router.beforeEach(async (to, from, next) => {
             NProgress.done()
         } else {
             // 获取用户信息
-            // await store.dispatch('user/getInfo')
+            await store.dispatch('user/getInfo')
             if(!to.meta.requireAdmin) {
                 next()
             }

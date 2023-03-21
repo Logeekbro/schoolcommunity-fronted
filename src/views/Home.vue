@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="box">🔔 {{ billboard.content }}</div>
+    <div class="box">🔔 {{ billboard.content || ' 这里可以看到最新通知' }}</div>
     <div class="columns">
       <div class="column is-three-quarters">
         <TopicList></TopicList>
@@ -36,6 +36,8 @@ export default {
       getBillboard().then((value) => {
         const { data } = value;
         this.billboard = data;
+      }).catch(err => {
+        
       });
     },
   },
