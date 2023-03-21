@@ -44,7 +44,6 @@ export default {
   },
   props: {
     slug: {
-      type: String,
       default: null
     },
     authorId: {

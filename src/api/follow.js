@@ -4,7 +4,7 @@ import store from '@/store'
 // 关注
 export function follow(id) {
   return request(({
-    url: `/follow/${id}`,
+    url: `/relation/follow/${id}`,
     method: 'post'
   }))
 }
@@ -12,7 +12,7 @@ export function follow(id) {
 // 取消关注
 export function unFollow(id) {
   return request(({
-    url: `/follow/${id}`,
+    url: `/relation/follow/${id}`,
     method: 'delete'
   }))
 }
@@ -20,15 +20,18 @@ export function unFollow(id) {
 // 验证是否关注
 export function hasFollow(topicUserId) {
   return request(({
-    url: `/follow/check/${topicUserId}/${store.getters.user.userId}`,
+    url: `/relation/follow/check/${topicUserId}`,
     method: 'get'
   }))
 }
 
-// 获取关注人数
+// 获取粉丝数
 export function getFollowerCount(userId) {
   return request(({
-    url: `/follow/open/count/${userId}`,
-    method: 'get'
+    url: `/relation/fans/count`,
+    method: 'get',
+    params: {
+      "userId": userId
+    }
   }))
 }

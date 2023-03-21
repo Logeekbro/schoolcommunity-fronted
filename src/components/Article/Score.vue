@@ -43,7 +43,7 @@ export default {
     components: {},
     props: {
         articleId: {
-            type: String,
+            type: Number,
             default: null
         },
         direction: {

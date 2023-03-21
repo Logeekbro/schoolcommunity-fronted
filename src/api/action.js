@@ -1,17 +1,17 @@
 import request from '@/utils/request'
 
-const start = "action"
+const start = "score"
 
 export function doLike(id) {
     return request({
-      url: `/${start}/like/${id}`,
+      url: `/${start}/like/article/id/${id}`,
       method: 'post'
     })
 }
 
 export function isLiked(id) {
     return request({
-        url: `/${start}/like/check/${id}`,
+        url: `/${start}/like/check/article/id/${id}`,
         method: 'get'
     })
 }

@@ -6,7 +6,7 @@ import store from '@/store'
 // 用户公开信息
 export function getOpenInfo(userId){
   return request({
-    url: `/user/open/openInfo/${userId}`,
+    url: `/user/info/basic/${userId}`,
     method: 'get',
   })
 }
@@ -54,16 +54,22 @@ export function updatePassword(passwordForm){
 // 获取用户头像
 export function getAvatar(userId) {
   return request({
-    url: `/user/open/avatar/${userId}`,
-    method: 'get'
+    url: `/user/info/avatar`,
+    method: 'get',
+    params: {
+      "userId": userId
+    }
   })
 }
 
 // 获取用户昵称
 export function getNickNameByUserId(userId) {
   return request({
-    url: `/user/open/nickName/${userId}`,
-    method: 'get'
+    url: `/user/info/nickName`,
+    method: 'get',
+    params: {
+      "userId": userId
+    }
   })
 }
 

@@ -27,7 +27,7 @@ export default {
   methods: {
     getTitle(articleId) {
         getTitleByArticleId(articleId).then(rep => {
-            if(rep.data.value) this.title = '《' + rep.data.value + '》'
+            if(rep.data.value) this.title = rep.data.value
             
         })
     }

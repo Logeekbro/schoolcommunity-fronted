@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
-const start = "section"
+const start = "article/section"
 
 // 获取所有分区列表
 export function getSectionList() {
     return request({
-      url: `/${start}/open/list`,
+      url: `/article/${start}/all`,
       method: 'get'
     })
 }
@@ -33,7 +33,7 @@ export function getArticleListBySectionId(current, size, sectionId) {
 // 根据分区id获取分区名称
 export function getSectionNameBySectionId(sectionId) {
   return request({
-    url: `/${start}/open/sectionName/id/${sectionId}`,
+    url: `/${start}/name/${sectionId}`,
     method: 'get'
   })
 }

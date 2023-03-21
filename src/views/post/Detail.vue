@@ -12,7 +12,7 @@
           <div class="has-text-grey is-size-7 mt-3">
             <span>{{ dayjs(topic.createTime).format('YYYY/MM/DD HH:mm:ss') }}</span>
             <el-divider direction="vertical" />
-            <span>分区：{{ sectionInfo.sectionName }}</span>
+            <span>分区：{{ sectionName }}</span>
             <!-- <el-divider direction="vertical" />
             <span>浏览：{{ topic.viewCount }}</span> -->
           </div>
@@ -67,7 +67,7 @@ import Vditor from 'vditor'
 import 'vditor/dist/index.css'
 import Score from '@/components/Article/Score'
 import Tag from '@/components/Tag/index'
-import { getSectionInfoByArticleId } from '@/api/section'
+import { getSectionNameBySectionId } from '@/api/section'
 
 export default {
   name: 'TopicDetail',
@@ -86,10 +86,7 @@ export default {
       tags: [],
       topicUser: {},
       views: "",
-      sectionInfo: {
-        sectionId: 1,
-        sectionName: '-'
-      }
+      sectionName: "-"
     }
   },
   mounted() {
@@ -115,8 +112,8 @@ export default {
         this.setTopicUser(data.authorId)
         this.renderMarkdown(this.topic.content)
         this.$vs.loading.close(this.$refs.contentLoading)
-        getSectionInfoByArticleId(this.topic.articleId).then(rep => {
-          this.sectionInfo = rep.data
+        getSectionNameBySectionId(this.topic.sectionId).then(rep => {
+          this.sectionName = rep.data.value
         })
         if (getViewCache() != this.topic.articleId) {
           setViewCache(this.topic.articleId)

@@ -29,7 +29,7 @@ export default {
   },
   created() {
     window.scrollTo(0, 0);
-    this.fetchBillboard();
+    // this.fetchBillboard();
   },
   methods: {
     async fetchBillboard() {

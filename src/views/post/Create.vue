@@ -15,7 +15,7 @@
               <strong style="display: block;">文章封面：</strong>
               <el-upload class="avatar-uploader" action="" :show-file-list="false" :http-request="customRequest"
                 :before-upload="beforeUpload">
-                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <img v-if="ruleForm.mainPic != ''" :src="imageUrl" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </div>
@@ -23,8 +23,8 @@
             <div style="margin-top: 20px; margin-bottom: 20px;">
               <strong>选择分区：</strong>
               <a-select ref="section" default-value="点击选择" style="width: 120px" @change="handleSectionChange">
-                <a-select-option v-for="(item, index) in sectionList" :key="index" :value="item.sectionId">
-                  {{ item.sectionName }}
+                <a-select-option v-for="(item, index) in sectionList" :key="index" :value="item.section_id">
+                  {{ item.section_name }}
                 </a-select-option>
               </a-select>
             </div>
@@ -45,16 +45,16 @@
             <div style="margin-top: 20px;">
               <strong>文章标签（可以有多个）：</strong>
 
-              <div style="margin-top: 15px">
-                <a-tag v-if="ruleForm.tags.length > 0" v-for="tag in ruleForm.tags" :key="tag.tagId" closable
+              <div v-if="ruleForm.tags.length > 0" style="margin-top: 15px">
+                <a-tag v-for="tag in ruleForm.tags" :key="tag" closable
                   @close="() => handleRemoveTag(tag)">
-                  {{ tag.tagName }}
+                  {{ tag }}
                 </a-tag>
               </div>
             </div>
             <br>
 
-            <el-autocomplete value-key="tagName" class="inline-input" v-model="inputTagName"
+            <el-autocomplete value-key="tag_name" class="inline-input" v-model="inputTagName"
               :fetch-suggestions="handleSearch" placeholder="请输入标签" :trigger-on-focus="false" @select="onSelect">
             </el-autocomplete>
             <el-button style="margin-left: 10px" type="primary" @click="handleInputConfirm">确认
@@ -85,7 +85,7 @@
             <el-form-item style="margin-top: 20px">
               <el-button type="primary" @click="submitForm('ruleForm')">发布文章
               </el-button>
-              <el-button type="success" @click="saveForm()">保存</el-button>
+              <!-- <el-button type="success" @click="saveForm()">保存</el-button> -->
               <el-button @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
           </el-form>
@@ -103,6 +103,7 @@ import Vditor from 'vditor'
 import 'vditor/dist/index.css'
 import vditorConfig from '@/config/vditor'
 import store from '../../store'
+import { uploadMainPic } from '@/api/upload'
 
 
 function getBase64(img, callback) {
@@ -120,7 +121,7 @@ export default {
         title: '',
         tags: [],
         content: '',
-        file: null,
+        mainPic: '',
         sectionId: null,
         summary: ''
       },
@@ -147,16 +148,16 @@ export default {
   },
   mounted() {
     this.fetchSectionList()
-    const formData = JSON.parse(localStorage.getItem("saveFormData"))
-    if (formData) {
-      this.ruleForm = formData
-      this.imageUrl = this.ruleForm.mainPic
-      vditorConfig.after = () => {
-        this.contentEditor.setValue(formData.content);
-      }
+    // const formData = JSON.parse(localStorage.getItem("saveFormData"))
+    // if (formData) {
+    //   this.ruleForm = formData
+    //   this.imageUrl = this.ruleForm.mainPic
+    //   vditorConfig.after = () => {
+    //     this.contentEditor.setValue(formData.content);
+    //   }
       
       
-    }
+    // }
     this.contentEditor = new Vditor("vditor", vditorConfig);
 
   },
@@ -219,9 +220,13 @@ export default {
       })
     },
     customRequest(info) {
-      this.ruleForm.file = info.file
-      getBase64(info.file, imageUrl => {
-        this.imageUrl = imageUrl
+      this.loadingToast = this.msg.indefiniteInfo("<i class='el-icon-loading'></i>上传中...")
+      uploadMainPic(info.file).then(rep => {
+        this.loadingToast.close()
+        this.msg.success("上传成功", 1000)
+        this.ruleForm.mainPic = rep.data.value
+        this.imageUrl = rep.data.value
+        
       })
     },
     fetchSectionList() {
@@ -234,18 +239,15 @@ export default {
     },
     handleInputConfirm() {
       const tagName = this.inputTagName.trim()
-      const exist = this.ruleForm.tags.some(tag => tag.tagName == tagName)
+      const exist = this.ruleForm.tags.some(tag => tag == tagName)
       if (tagName.trim() != '' && !exist) {
         this.inputTagName = ''
-        const tag = this.tagData.find((item, index) => item.tagName == tagName)
+        const tag = this.tagData.find((item, index) => item == tagName)
         if (tag) {
           this.ruleForm.tags.push(tag)
         }
         else {
-          this.ruleForm.tags.push({
-            tagId: null,
-            tagName: tagName
-          })
+          this.ruleForm.tags.push(tagName)
         }
       }
       else {
@@ -271,7 +273,7 @@ export default {
       }
     },
     onSelect(tag) {
-      this.inputTagName = tag.tagName
+      this.inputTagName = tag.tag_name
     },
     beforeUpload(file) {
       const accept = ['image/jpg', 'image/jpeg', 'image/png']

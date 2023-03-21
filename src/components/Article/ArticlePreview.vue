@@ -12,7 +12,7 @@
                 :src="!item.mainPic ? 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png' : item.mainPic" />
             <div style="margin-bottom: 25px">
                 <router-link style="font-size: 18px" :to="{ path: `/post/${item.articleId}` }">
-                    <strong>{{ item.title}}</strong>
+                    <strong><article-title :articleId="item.articleId"></article-title></strong>
                 </router-link>
                 <el-tag style="margin-left: 5px" size="small" v-if="item.top">置顶</el-tag>
                 <br>
@@ -24,7 +24,7 @@
             <div class="level-left">
                 <user-avatar :userId="item.authorId" :size="25" style="margin-right: 8px"></user-avatar>
                 <router-link class="level-item" :to="{ path: `/member/${item.authorId}/home` }">
-                    <strong>{{ item.nickName }}</strong>
+                    <strong><nick-name :userId="item.authorId"/></strong>
                 </router-link>
                 <el-divider direction="vertical" />
                 <span class="mr-1 ml-2">
@@ -74,10 +74,12 @@ import Score from '@/components/Article/Score'
 import Tag from '@/components/Tag/index'
 import { deleteArticleById, changeArticleTopStatus } from '@/api/post'
 import { mapGetters } from 'vuex'
+import ArticleTitle from './ArticleTitle.vue'
+import NickName from '../User/NickName.vue'
 
 export default {
     name: 'ArticlePreview',
-    components: { UserAvatar, Score, Tag },
+    components: { UserAvatar, Score, Tag, ArticleTitle, NickName },
     props: {
         loadData: {
             type: Function,

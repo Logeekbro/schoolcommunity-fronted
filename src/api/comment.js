@@ -1,15 +1,17 @@
 import request from '@/utils/request'
 import store from '@/store'
 
-const start = "comment"
+const start = "article/comment"
 
+// 获取文章的评论列表
 export function fetchCommentsByTopicId(articleId, current, size) {
   const params = {
+    articleId: articleId,
     current: current,
     size: size
   }
   return request({
-    url: `/${start}/${articleId}`,
+    url: `/${start}/list`,
     method: 'get',
     params: params
   })
@@ -24,11 +26,14 @@ export function pushComment(data) {
   })
 }
 
-// 删除评论
+// 用户删除自己的评论
 export function deleteComment(id) {
   return request({
-    url: `/${start}/${id}`,
+    url: `/${start}/self`,
     method: 'delete',
+    params: {
+      "commentId": id
+    }
   })
 }
 

@@ -17,7 +17,7 @@ export default {
     components: {},
     props: {
         articleId: {
-            type: String,
+            type: Number,
             default: null
         }
     },
@@ -29,7 +29,7 @@ export default {
     watch: {
         articleId: async function (n, o) {
             const { data } = await getTagSetById(n)
-            this.tags = data.value
+            this.tags = data
         }
     },
     computed: {},
@@ -38,7 +38,7 @@ export default {
     async mounted() {
         if (this.articleId != null) {
             const { data } = await getTagSetById(this.articleId)
-            this.tags = data.value
+            this.tags = data
         }
 
     }

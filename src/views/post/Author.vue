@@ -6,11 +6,11 @@
       </div>
       <div class="has-text-centered">
         <!-- <el-avatar :fit="'fill'" :size="64" :src='user.avatar' /> -->
-        <user-avatar :size="65" :userId="user.userId" ></user-avatar>
+        <user-avatar :size="65" :userId="userId" ></user-avatar>
         <!-- <a-avatar shape="circle" :size="65" :src="user.avatar" /> -->
         <p class="is-size-5 mb-5">
           <router-link :to="{ path: `/member/${user.userId}/home` }">
-            {{ user.nickName }} <span class="is-size-7 has-text-grey">{{ '@' + user.account }}</span>
+            {{ user.nickName }} <span class="is-size-7 has-text-grey">{{ '@' + user.username }}</span>
           </router-link>
         </p>
         <div class="columns is-mobile">
@@ -24,7 +24,7 @@
           </div>
         </div>
         <div>
-          <follow-button :authorId="user.userId" @addFollower="addFollower" @reduceFollower="reduceFollower"></follow-button>
+          <follow-button :authorId="userId" @addFollower="addFollower" @reduceFollower="reduceFollower"></follow-button>
         </div>
       </div>
     </el-card>
@@ -73,6 +73,7 @@ export default {
   methods: {
     fetchInfo() {
       console.log(this.user.userId)
+      this.userId = this.user.userId
       this.getArticleCount(this.user.userId)
       this.getFollowerCount(this.user.userId)
     },

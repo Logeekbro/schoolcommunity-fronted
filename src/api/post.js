@@ -11,10 +11,9 @@ const headers = {
 // 用户主页文章列表
 export function getInfoByName(username, page, size) {
   return request({
-    url: `/${start}/open/user/list`,
+    url: `/${start}/list/userId/${username}`,
     method: 'get',
     params: {
-      userId: username,
       current: page,
       size: size
     }
@@ -24,7 +23,7 @@ export function getInfoByName(username, page, size) {
 // 获取首页文章
 export function getList(pageNo, size, type) {
   return request(({
-    url: `/${start}/open/${type}`,
+    url: `/${start}/${type}`,
     method: 'get',
     params: { current: pageNo, size: size }
   }))
@@ -32,26 +31,25 @@ export function getList(pageNo, size, type) {
 
 // 发布
 export function post(topic) {
-  let data = new FormData()
-  data.append("title", topic.title)
-  data.append("file", topic.file)
-  data.append("content", topic.content)
-  data.append("sectionId", topic.sectionId)
-  data.append("summary", topic.summary)
-  data.append("tags", JSON.stringify(topic.tags))
-  data.append("needReview", topic.needReview)
+  // let data = new FormData()
+  // data.append("title", topic.title)
+  // data.append("mainPic", topic.mainPic)
+  // data.append("content", topic.content)
+  // data.append("sectionId", topic.sectionId)
+  // data.append("summary", topic.summary)
+  // data.append("tags", JSON.stringify(topic.tags))
+  // data.append("needReview", topic.needReview)
   return request({
     url: `/${start}/`,
     method: 'post',
-    data: data,
-    headers: headers
+    data: topic
   })
 }
 
 // 获取文章详情
 export function getTopicDetail(id, isReEdit=false) {
   return request({
-    url: `/${start}/open/detail/${id}`,
+    url: `/${start}/detail/${id}`,
     method: 'get',
     params: {isReEdit: isReEdit}
   })
@@ -90,7 +88,7 @@ export function update(topic) {
 // 删除
 export function deleteTopic(id) {
   return request({
-    url: `/${start}/${id}`,
+    url: `/${start}/my/id/${id}`,
     method: 'delete',
   })
 }
@@ -98,7 +96,7 @@ export function deleteTopic(id) {
 // 用户发表的文章数量
 export function getArticleCount(id) {
   return request({
-    url: `/${start}/open/count/${id}`,
+    url: `/${start}/count/userId/${id}`,
     method: 'get',
   })
 }
@@ -117,17 +115,21 @@ export function getUserHistory(current, size){
 }
 
 // 获取首页置顶文章
-export function getIndexTop() {
+export function getIndexTop(sectionId) {
+  const params = {
+    "sectionId": sectionId
+  }
   return request({
-    url: `/${start}/open/index/top`,
-    method: 'get'
+    url: `/${start}/top`,
+    method: 'get',
+    params: params
   })
 }
 
 // 通过文章id获取文章标题
 export function getTitleByArticleId(articleId) {
   return request({
-    url: `/${start}/open/title/${articleId}`,
+    url: `/${start}/title/${articleId}`,
     method: 'get'
   })
 }
@@ -135,7 +137,7 @@ export function getTitleByArticleId(articleId) {
 // 获取活跃作者信息
 export function getActiveAuthors(n) {
   return request({
-    url: `/${start}/open/mostActiveAuthors/${n}`,
+    url: `/${start}/activeAuthors/${n}`,
     method: 'get'
   })
 }
@@ -143,7 +145,7 @@ export function getActiveAuthors(n) {
 // 获取待审核的文章列表
 export function getNeedReviewArticleList() {
   return request({
-    url: `/${start}/admin/needReviewList`,
+    url: `/${start}/review/list`,
     method: 'get'
   })
 }
@@ -151,7 +153,7 @@ export function getNeedReviewArticleList() {
 // 更新文章审核状态
 export function updateReviewArticleStatus(articleId, desc = '', isPass) {
   return request({
-    url: `/${start}/admin/review/id/${articleId}`,
+    url: `/${start}/review/result/articleId/${articleId}`,
     method: 'put',
     params: {
       isPass: isPass,
@@ -160,10 +162,10 @@ export function updateReviewArticleStatus(articleId, desc = '', isPass) {
   })
 }
 
-// 根据用户id获取该用户待审核的文章列表
+// 用户获取自己的待审核的文章列表
 export function getNeedReviewArticleListByUserId() {
   return request({
-    url: `/${start}/needReviewList`,
+    url: `/${start}/review/list/my`,
     method: 'get'
   })
 }
@@ -171,7 +173,7 @@ export function getNeedReviewArticleListByUserId() {
 // 获取审核未通过的文章列表
 export function getUnPassReviewListByUserId() {
   return request({
-    url: `/${start}/unPassReviewList`,
+    url: `/${start}/review/unPass`,
     method: 'get'
   })
 }
@@ -179,16 +181,15 @@ export function getUnPassReviewListByUserId() {
 // 直接根据id删除文章，需要管理员权限
 export function deleteArticleById(articleId) {
   return request({
-    url: `/${start}/admin/id`,
-    method: 'delete',
-    params: {articleId: articleId}
+    url: `/${start}/id${articleId}`,
+    method: 'delete'
   })
 }
 
 // 将文章设为置顶或取消置顶，需要管理员权限
 export function changeArticleTopStatus(articleId) {
   return request({
-    url: `/${start}/admin/topStatus`,
+    url: `/${start}/topStatus`,
     method: 'put',
     params: {articleId: articleId}
   })

@@ -6,8 +6,11 @@ const start = "view"
 // 记录浏览历史
 export function addView(id) {
   return request(({
-    url: `/${start}/${id}`,
-    method: 'post'
+    url: "/visit/history/article",
+    method: 'post',
+    params: {
+      "articleId": id
+    }
   }))
 }
 
@@ -30,7 +33,7 @@ export function deleteAll() {
 // 通过日期获取浏览记录
 export function getUserHistoryByDate(dt) {
   return request(({
-    url: `/${start}/history/date`,
+    url: "/visit/history/date",
     method: 'get',
     params: {
       targetDate: dt
