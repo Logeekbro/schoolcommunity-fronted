@@ -48,7 +48,7 @@
   </template>
   
   <script>
-  import { getArticleListBySectionId } from '@/api/section'
+  import { getList } from '@/api/post'
   import ArticlePreview from '@/components/Article/ArticlePreview'
   
   export default {
@@ -71,7 +71,7 @@
     },
     methods: {
       async fetchList() {
-        const { data } = await getArticleListBySectionId(this.page.current, this.page.size, this.$route.params.sectionId)
+        const { data } = await getList(this.page.current, this.page.size, "latest", this.$route.params.sectionId)
         this.page.current = data.current
         this.page.size = data.size
         this.page.total = data.total

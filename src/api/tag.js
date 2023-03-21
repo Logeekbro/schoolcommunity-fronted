@@ -24,7 +24,7 @@ export function getSimilarTagListByTagName(tagName) {
 // 获取热门标签列表
 export function getHotTags(n) {
   return request({
-    url: `/${start}/open/hotTags/${n}`,
+    url: `/${start}/list/hot/${n}`,
     method: 'get'
   })
 }

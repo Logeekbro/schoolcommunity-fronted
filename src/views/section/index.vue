@@ -4,9 +4,9 @@
             <a-col v-for="(item, index) in sectionList" :key="index" class="gutter-row" :span="6">
                 <el-card shadow="hover" style="cursor: pointer;">
 
-                    <router-link :to="{ path: `/section/${item.sectionId}` }">
+                    <router-link :to="{ path: `/section/${item.section_id}` }">
                         <div style="text-align: center;">
-                            <span style="font-size: 20px">{{ item.sectionName }}</span>
+                            <span style="font-size: 20px">{{ item.section_name }}</span>
                         </div>
                     </router-link>
                 </el-card>

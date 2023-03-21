@@ -21,11 +21,11 @@ export function getInfoByName(username, page, size) {
 }
 
 // 获取首页文章
-export function getList(pageNo, size, type) {
+export function getList(pageNo, size, type, sectionId=null) {
   return request(({
     url: `/${start}/${type}`,
     method: 'get',
-    params: { current: pageNo, size: size }
+    params: { current: pageNo, size: size, sectionId: sectionId }
   }))
 }
 

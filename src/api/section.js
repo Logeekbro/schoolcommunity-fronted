@@ -5,7 +5,7 @@ const start = "article/section"
 // 获取所有分区列表
 export function getSectionList() {
     return request({
-      url: `/article/${start}/all`,
+      url: `/${start}/all`,
       method: 'get'
     })
 }

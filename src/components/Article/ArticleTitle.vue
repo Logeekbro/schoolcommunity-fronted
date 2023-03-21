@@ -9,7 +9,6 @@ export default {
   name: "ArticleTitle",
   props: {
     articleId: {
-        type: String,
         default: null
     }
   },
