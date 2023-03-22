@@ -17,7 +17,6 @@ export default {
     name: "UserAvatar",
     props: {
         userId: {
-            type: Number,
             default: 0
         },
         shape: {

@@ -243,26 +243,10 @@
           </vs-tab>
 
           <!-- 关注列表 -->
-          <vs-tab style="padding: 0" label="关  注" @click="fectchUserFollows" icon="group_work">
-            <el-card style="height: 509.5px; overflow-y: scroll; overflow-x: hidden;">
-              <div v-if="follows.length == 0" style="text-align: center">
-                <el-empty description="暂无关注">
-                </el-empty>
-              </div>
-              <vs-list v-else>
-                <router-link v-for="(item, index) in follows" :key="index"
-                  :to="{ path: `/member/${item.userId}/home` }">
-                  <vs-list-item :title="item.nickName" :subtitle="'简介：' + item.introduce" style="height: 80px">
-                    <template slot="avatar">
-                      <user-avatar :size="54" :userId="item.userId" style="margin-right: 20px"></user-avatar>
-                      <!-- <a-avatar shape="circle" :size="54" :src="item.avatar" style="margin-right: 20px" /> -->
-                    </template>
-                  </vs-list-item>
-                </router-link>
-                <!-- <a :href="`/member/${item.userId}/home`">
-                  
-                </a> -->
-              </vs-list>
+          <vs-tab style="padding: 0" label="关  注" icon="group_work">
+            <el-card >
+              <user-card-list :fetchFunc="fetchF" :userId="topicUser.userId"></user-card-list>
+              
             </el-card>
           </vs-tab>
         </vs-tabs>
@@ -272,17 +256,19 @@
 </template>
 
 <script>
-import { getOpenInfo, getFollows } from '@/api/user'
+import { getInfo } from '@/api/user'
+import { getFollows } from '@/api/follow'
 import { getInfoByName, deleteTopic, getNeedReviewArticleListByUserId, getUnPassReviewListByUserId } from '@/api/post'
 import pagination from '@/components/Pagination/index'
 import FollowButton from '@/components/Follow/FollowButton'
 import { mapGetters } from 'vuex'
 import store from '@/store'
 import UserAvatar from '@/components/User/Avatar'
+import UserCardList from '../../components/User/UserCardList.vue'
 
 export default {
   name: 'Profile',
-  components: { pagination, FollowButton, UserAvatar },
+  components: { pagination, FollowButton, UserAvatar, UserCardList },
   data() {
     return {
       topicUser: {
@@ -307,7 +293,8 @@ export default {
       unPassArticles: [],
       defaultOpenKey: this.$route.query.articleType,
       needReviewArticleCount: 0,
-      unPassArticleCount: 0
+      unPassArticleCount: 0,
+      fetchF: getFollows
     }
   },
   computed: {
@@ -329,7 +316,7 @@ export default {
     this.fetchUserById()
     this.fetchNeedReviewArticleList()
     this.fetchUnPassReviewArticleList()
-    getOpenInfo(this.$route.params.username).then((res) => {
+    getInfo(this.$route.params.username).then((res) => {
       const { data } = res
       data.avatar += "?" + store.getters.avatarTS
       this.topicUser = data

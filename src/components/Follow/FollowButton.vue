@@ -27,11 +27,10 @@ export default {
     props: {
         authorId: {
             required: true,
-            type: Number
         }
     },
     mounted() {
-        
+        this.fetchInfo()
     },
     watch: {
         authorId: function (n, o) {

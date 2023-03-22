@@ -17,8 +17,11 @@ export function addView(id) {
 // 删除浏览历史
 export function deleteView(id){
   return request(({
-    url: `/${start}/${id}`,
-    method: 'delete'
+    url: `/visit/history/id`,
+    method: 'delete',
+    params: {
+      "historyId": id
+    }
   }))
 }
 

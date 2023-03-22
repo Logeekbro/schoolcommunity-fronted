@@ -37,7 +37,7 @@ export function getInfo() {
 // 更新
 export function update(user) {
   return request({
-    url: '/user/info',
+    url: '/user/info/',
     method: 'put',
     data: user
   })

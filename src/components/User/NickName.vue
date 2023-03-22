@@ -11,7 +11,6 @@ export default {
     components: {},
     props: {
         userId: {
-            type: Number,
             default: null
         }
     },

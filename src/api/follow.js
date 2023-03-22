@@ -35,3 +35,15 @@ export function getFollowerCount(userId) {
     }
   }))
 }
+
+// 用户关注列表
+export function getFollows(userId, current, size) {
+  return request(({
+    url: `/relation/follow/list/userId/${userId}`,
+    method: 'get',
+    params: {
+      "current": current,
+      "size": size
+    }
+  }))
+}

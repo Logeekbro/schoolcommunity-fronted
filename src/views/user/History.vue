@@ -44,19 +44,13 @@
         <a-list-item v-for="(item, index) in history.records" :key="index">
           <div class="media-content">
             <div class="content ellipsis is-ellipsis-1">
-              <el-tooltip
-                :open-delay="700"
-                class="item"
-                effect="dark"
-                :content="item.title"
-                placement="top"
+              <router-link
+                :to="{ name: 'post-detail', params: { id: item.articleId } }"
               >
-                <router-link
-                  :to="{ name: 'post-detail', params: { id: item.articleId } }"
-                >
-                  <strong><article-title :articleId="item.articleId" /></strong>
-                </router-link>
-              </el-tooltip>
+                <strong
+                  ><article-title :articleId="item.articleId" :tooltip="true"
+                /></strong>
+              </router-link>
             </div>
             <nav class="level has-text-grey is-size-7">
               <div class="level-left">
@@ -71,7 +65,12 @@
               <div class="level-item">
                 <a
                   @click="
-                    handleDeleteView(item.viewId, item.articleId, pindex, index)
+                    handleDeleteView(
+                      item.historyId,
+                      item.articleId,
+                      pindex,
+                      index
+                    )
                   "
                 >
                   <span class="tag is-danger">删除</span>

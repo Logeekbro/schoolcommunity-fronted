@@ -21,7 +21,7 @@ export function uploadAvatar(file, haveAvatar) {
     data.append("file", file)
     data.append("haveAvatar", haveAvatar)
     return request({
-      url: '/upload/avatar',
+      url: '/file/upload/avatar',
       method: 'post',
       headers: headers,
       data: data
