@@ -86,10 +86,13 @@
           </a-tab-pane>
         </a-tabs>
       </a-tab-pane>
-      <a-tab-pane key="2" tab="评论">
+      <a-tab-pane key="2" tab="角色&权限">
+        <permission/>
+      </a-tab-pane>
+      <a-tab-pane key="3" tab="评论">
         <h2>开发中...</h2>
       </a-tab-pane>
-      <a-tab-pane key="3" tab="用户">
+      <a-tab-pane key="4" tab="用户">
         <h2>开发中...</h2>
       </a-tab-pane>
     </a-tabs>
@@ -103,10 +106,11 @@ import Vditor from 'vditor'
 import SectionIdToName from '../../components/Section/SectionIdToName.vue';
 import Tag from '@/components/Tag/index'
 import ArticleIdToNickName from '../../components/User/ArticleIdToNickName.vue';
+import Permission from './Permission.vue';
 
 export default {
   name: "AdminIndex",
-  components: { NickName, SectionIdToName, Tag, ArticleIdToNickName },
+  components: { NickName, SectionIdToName, Tag, ArticleIdToNickName, Permission },
   props: {},
   data() {
     return {

@@ -99,6 +99,7 @@ service.interceptors.response.use(
     else if (error.response.status == 401) {
       // 弹出验证码界面
       // changeVisible(true)
+      MyMsg.error("权限不足", 1500)
     }
     else if (error.response.status == 423) {
       // 弹出验证码界面

@@ -46,10 +46,11 @@
               </span>
             </div>
           </template>
-          <template v-if="currentPageData.length < 10" slot="footer" slot-scope="currentPageData">
+          <template slot="footer" slot-scope="pageData">
             <a-button :disabled="editingKey != ''" class="editable-add-btn" @click="handleAdd">
               添加权限
             </a-button>
+            <div> {{ size }}</div>
           </template>
         </a-table>
       </el-tab-pane>
