@@ -39,7 +39,7 @@
                 <score :articleId="item.articleId"></score>
             </div>
 
-            <div v-if="user.roleIdList && user.roleIdList.includes(1, 0)"
+            <div v-if="user.roleIdList && user.roleIdList.includes('1', 0)"
                 style="background-color: aliceblue; margin-top: 10px;padding: 10px">
                 <!-- <el-divider></el-divider> -->
                 <div>

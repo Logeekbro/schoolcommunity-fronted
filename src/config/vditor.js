@@ -1,7 +1,7 @@
 import store from "@/store"
 
 const headers = {
-    userToken: store.getters.token
+    Authorization: "Bearer " + store.getters.token
   }
 
 const vditorConfig = {
@@ -92,7 +92,7 @@ const vditorConfig = {
         enable: false
     },
     upload: {
-        url: process.env.VUE_APP_SERVER_URL + "/upload/article/img",
+        url: process.env.VUE_APP_SERVER_URL + "file/upload/article/img",
         accept: 'image/jpg, image/jpeg, image/png',
         max: 5 * 1024 * 1024,
         headers: headers,

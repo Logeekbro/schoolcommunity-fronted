@@ -72,7 +72,6 @@ export default {
   },
   methods: {
     fetchInfo() {
-      console.log(this.user.userId)
       this.userId = this.user.userId
       this.getArticleCount(this.user.userId)
       this.getFollowerCount(this.user.userId)

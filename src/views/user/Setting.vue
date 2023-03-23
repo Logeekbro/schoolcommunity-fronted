@@ -286,14 +286,17 @@ export default {
       });
     },
     updatePassword() {
-      if(this.passwordForm.newPassword !== this.passwordForm.confirmPassword) return
+      if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword)
+        return;
       updatePassword(this.passwordForm).then((response) => {
         this.$alert("密码修改成功，请重新登录", "", {
           confirmButtonText: "确定",
           center: true,
           callback: (action) => {
             removeToken();
-            window.location.href = "/login";
+            this.$router.push({
+              name: "login",
+            });
           },
         });
       });

@@ -55,6 +55,14 @@ export function getTopicDetail(id, isReEdit=false) {
   })
 }
 
+// 获取自己的文章详情
+export function getMyTopicDetail(id) {
+  return request({
+    url: `/${start}/my/detail/${id}`,
+    method: 'get'
+  })
+}
+
 // 获取详情页推荐
 export function getRecommendTopics(id) {
   return request({
@@ -68,20 +76,19 @@ export function getRecommendTopics(id) {
 
 // 更新
 export function update(topic) {
-  let data = new FormData()
-  data.append("articleId", topic.articleId)
-  data.append("authorId", topic.authorId)
-  data.append("title", topic.title)
-  data.append("sectionId", topic.sectionId)
-  data.append("file", topic.file)
-  data.append("content", topic.content)
-  data.append("summary", topic.summary)
-  data.append("needReview", topic.needReview)
+  // let data = new FormData()
+  // data.append("articleId", topic.articleId)
+  // data.append("authorId", topic.authorId)
+  // data.append("title", topic.title)
+  // data.append("sectionId", topic.sectionId)
+  // data.append("file", topic.file)
+  // data.append("content", topic.content)
+  // data.append("summary", topic.summary)
+  // data.append("needReview", topic.needReview)
   return request({
     url: `/${start}/`,
     method: 'put',
-    data: data,
-    headers: headers
+    data: topic
   })
 }
 
@@ -155,7 +162,7 @@ export function updateReviewArticleStatus(articleId, desc = '', isPass) {
   return request({
     url: `/${start}/review/result/articleId/${articleId}`,
     method: 'put',
-    params: {
+    data: {
       isPass: isPass,
       description: desc
     }

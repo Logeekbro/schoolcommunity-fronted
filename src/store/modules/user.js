@@ -1,6 +1,6 @@
 import { getUserInfo, login, logout } from "@/api/auth/auth";
 import { getToken, setToken, setTokenTemp, removeToken } from "@/utils/auth";
-import { getUserRoleIdList } from "@/api/permission";
+import { getUserRoleIdList } from "@/api/role";
 import { getBasicInfo } from "@/api/user";
 import { removeViewCache } from '@/utils/view-cache'
 
@@ -9,7 +9,7 @@ const state = {
   user: "", // 用户对象
   avatarTS: Date.now(), // 头像更新的时间戳，用于解决缓存问题
   avatarMap: new Map(), // 已获取的用户头像, 避免重复发送请求
-  verifyVisible: false  // 控制验证码界面是否可见
+  verifyVisible: false,  // 控制验证码界面是否可见
 };
 
 const mutations = {
@@ -40,10 +40,10 @@ const actions = {
         .then((response) => {
           const { data } = response;
           commit("SET_TOKEN_STATE", data.access_token);
-          if(rememberMe){
+          if (rememberMe) {
             setToken(data.access_token);
           }
-          else{
+          else {
             setTokenTemp(data.access_token)
           }
           resolve();
@@ -66,9 +66,9 @@ const actions = {
             resolve();
             reject("Verification failed, please Login again.");
           }
-          // const rep = await getUserRoleIdList()
-          // data.roleIdList = rep.data
-          data.avatar +=  "?" + state.avatarTS
+          const rep = await getUserRoleIdList(data.userId)
+          data.roleIdList = rep.data
+          data.avatar += "?" + state.avatarTS
           commit("SET_USER_STATE", data);
           resolve(data);
         })
@@ -93,10 +93,10 @@ const actions = {
         });
     });
   },
-  updateAvatar({ commit }, ts){
+  updateAvatar({ commit }, ts) {
     commit("SET_AVATAR_STATE", ts)
   },
-  setAvatar({ commit }, obj){
+  setAvatar({ commit }, obj) {
     commit("SET_AVATAR_MAP_VALUE_STATE", obj)
   },
   changeVerifyVisible({ commit }, v) {

@@ -46,8 +46,12 @@ export function update(user) {
 // 修改密码
 export function updatePassword(passwordForm){
   return request({
-    url: `/user/password/${passwordForm.oldPassword}/${passwordForm.newPassword}`,
+    url: `/user/info/password`,
     method: 'put',
+    data: {
+      oldPwd: passwordForm.oldPassword,
+      newPwd: passwordForm.newPassword
+    }
   })
 }
 

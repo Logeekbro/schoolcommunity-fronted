@@ -23,7 +23,7 @@
         <p class="card-header-title">
           评论详情
         </p>
-        <lv-reply-item v-for="reply in replyList" :key="`reply-${reply.reply.replyId}`" :reply="reply"
+        <lv-reply-item v-for="reply in replyList" :key="`reply-${reply.replyId}`" :reply="reply"
           @doReply="handleReply" @reloadReply="loadMore" :myUserId="myUserId" :authorId="authorId"></lv-reply-item>
         <div v-show="hasMore" style="text-align: center; padding-bottom: 3%;">
           <a @click="loadMore"><strong>{{ replyBottomText }}</strong></a>
@@ -36,23 +36,25 @@
     </b-modal>
 
     <figure class="media-left">
-      <user-avatar shape="square" :size="52" :userId="comment.user.userId"></user-avatar>
+      <user-avatar shape="square" :size="52" :userId="comment.userId"></user-avatar>
       <!-- <a-avatar shape="square" :size="52" :src="comment.user.avatar + '?' + ts" /> -->
     </figure>
     <div class="media-content">
       <div class="content">
         <div style="white-space: pre-wrap;word-break: break-all">
-          <el-tag v-if="comment.user.userId == authorId" size="mini">作者</el-tag>
-          <router-link :to="{ path: `/member/${comment.user.userId}/home` }">
-            <strong>{{ ' ' + comment.user.nickName + ' ' }}</strong>
+          <a-space>
+          <el-tag v-if="comment.userId == authorId" size="mini">作者</el-tag>
+          <router-link :to="{ path: `/member/${comment.userId}/home` }">
+            <strong><nick-name :userId="comment.userId"/></strong>
           </router-link>
 
           <span v-text="'·'"></span>
-          <small class="ml-2">{{ dayjs(comment.comment.createTime).format('YYYY/MM/DD HH:mm') }}</small>
+          <small>{{ dayjs(comment.createTime).format('YYYY/MM/DD HH:mm') }}</small>
+        </a-space>
 
           <br>
           <b-message type="is-info" style="margin-top:10px;">
-            {{ comment.comment.content }}
+            {{ comment.content }}
           </b-message>
 
         </div>
@@ -93,12 +95,14 @@ import { deleteComment } from '@/api/comment'
 import { addReply, getReplyList, getReplyCount } from '@/api/reply'
 import LvReplyItem from './ReplyItem'
 import UserAvatar from '@/components/User/Avatar'
+import NickName from '../User/NickName.vue'
 
 export default {
   name: 'LvCommentsItem',
   components: {
     LvReplyItem,
-    UserAvatar
+    UserAvatar,
+    NickName
   },
   props: {
     comment: {
@@ -156,7 +160,7 @@ export default {
     },
     doAddReply() {
       const target = this.nowTarget
-      addReply(this.comment.comment.commentId, this.replyContent, target).then((response) => {
+      addReply(this.comment.commentId, this.replyContent, target).then((response) => {
         this.replyVisible = false
         // if (this.lastPageRecordsCount < 5) {
         //   this.replyList.splice(this.lastRecordIndex)
@@ -177,7 +181,7 @@ export default {
     },
     showReplyList() {
       this.replyListVisible = true
-      getReplyList(this.comment.comment.commentId, this.page.current, this.page.size).then((response) => {
+      getReplyList(this.comment.commentId, this.page.current, this.page.size).then((response) => {
         const { data } = response
         this.page = data
         this.replyList = this.page.records
@@ -197,7 +201,7 @@ export default {
     loadMore(call = null) {
       this.replyBottomText = "加载中..."
       this.page.current++
-      getReplyList(this.comment.comment.commentId, this.page.current, this.page.size).then((response) => {
+      getReplyList(this.comment.commentId, this.page.current, this.page.size).then((response) => {
         const { data } = response
         this.page = data
         this.page.totalPage = Math.ceil(this.page.total / this.page.size)
@@ -229,7 +233,7 @@ export default {
 
     },
     async getReplyCounts() {
-      getReplyCount(this.comment.comment.commentId).then((response) => {
+      getReplyCount(this.comment.commentId).then((response) => {
         const { data } = response
         this.replyCount = data.value
       })

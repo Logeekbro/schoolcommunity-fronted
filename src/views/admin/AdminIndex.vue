@@ -82,15 +82,15 @@
 
           </a-tab-pane>
           <a-tab-pane key="1-2" tab="新发布">
-            <ArticleIdToNickName articleId="1581199845740265474"/>
+            <h2>开发中...</h2>
           </a-tab-pane>
         </a-tabs>
       </a-tab-pane>
       <a-tab-pane key="2" tab="评论">
-        Content of Tab 2
+        <h2>开发中...</h2>
       </a-tab-pane>
       <a-tab-pane key="3" tab="用户">
-        Content of Tab 3
+        <h2>开发中...</h2>
       </a-tab-pane>
     </a-tabs>
   </el-card>

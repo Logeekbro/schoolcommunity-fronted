@@ -27,7 +27,7 @@ router.beforeEach(async (to, from, next) => {
             if(!to.meta.requireAdmin) {
                 next()
             }
-            else if(to.meta.requireAdmin && store.getters.user.roleIdList.includes(1)) {
+            else if(to.meta.requireAdmin && store.getters.user.roleIdList.includes("1")) {
                 next()
             }
             else {

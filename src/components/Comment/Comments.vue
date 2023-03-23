@@ -7,7 +7,7 @@
     <lv-comments-form :slug="slug" @loadComments="fetchComments" />
     
     <lv-comments-item @loadComments="fetchComments" v-for="comment in comments"
-      :key="`comment-${comment.comment.commentId}`" :comment="comment" :ts="Date.now()" :authorId="authorId" />
+      :key="`comment-${comment.commentId}`" :comment="comment" :ts="Date.now()" :authorId="authorId" />
 
     <pagination v-show="page.total > 0" class="mt-5" :total="page.total" :page.sync="page.current"
       :limit.sync="page.size" :autoScroll="false" @pagination="fetchComments" />

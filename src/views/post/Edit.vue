@@ -16,18 +16,23 @@
                 <strong style="display: block;">文章封面：</strong>
                 <el-upload class="avatar-uploader" action="" :show-file-list="false" :http-request="customRequest"
                   :before-upload="beforeUpload">
-                  <img v-if="imageUrl" :src.sync="imageUrl" class="avatar">
+                  <img v-if="imageUrl" :src="imageUrl" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </div>
 
               <div style="margin-top: 20px; margin-bottom: 20px;">
                 <strong>文章分区：</strong>
-                <a-select v-model="topic.sectionId" style="width: 120px" @change="handleSectionChange">
+                <a-select ref="section" v-model="topic.sectionId" style="width: 120px" @change="handleSectionChange">
+                <a-select-option v-for="(item, index) in sectionList" :key="index" :value="item.section_id">
+                  {{ item.section_name }}
+                </a-select-option>
+              </a-select>
+                <!-- <a-select v-model="topic.sectionId" style="width: 120px" @change="handleSectionChange">
                   <a-select-option v-for="item in sectionList" :key="item.sectionId" :value="item.sectionId">
                     {{ item.sectionName }}
                   </a-select-option>
-                </a-select>
+                </a-select> -->
               </div>
 
               <div style="margin-top: 20px;margin-bottom: 20px;">
@@ -111,13 +116,14 @@
 </template>
 
 <script>
-import { getTopicDetail, update } from "@/api/post";
+import { getMyTopicDetail, update } from "@/api/post";
 import { getSectionList } from "@/api/section";
 import Vditor from "vditor";
 import "vditor/dist/index.css";
 import vditorConfig from '@/config/vditor';
 import store from '@/store'
 import dayjs from 'dayjs'
+import { uploadMainPic } from '@/api/upload'
 
 function getBase64(img, callback) {
   const reader = new FileReader();
@@ -152,7 +158,7 @@ export default {
       this.contentEditor = new Vditor("vditor", vditorConfig);
     },
     fetchTopic() {
-      getTopicDetail(this.$route.params.id, this.isReEdit).then((value) => {
+      getMyTopicDetail(this.$route.params.id).then((value) => {
         const { data } = value
         this.topic = data
         this.imageUrl = this.topic.mainPic
@@ -169,9 +175,13 @@ export default {
       })
     },
     customRequest(info) {
-      this.topic.file = info.file
-      getBase64(info.file, imageUrl => {
-        this.imageUrl = imageUrl
+      this.loadingToast = this.msg.indefiniteInfo("<i class='el-icon-loading'></i>上传中...")
+      uploadMainPic(info.file).then(rep => {
+        this.loadingToast.close()
+        this.msg.success("上传成功", 1000)
+        this.topic.mainPic = rep.data.value
+        this.imageUrl = rep.data.value
+        
       })
     },
     beforeUpload(file) {

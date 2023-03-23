@@ -1,35 +1,52 @@
 <template>
-
   <div class="member">
     <div class="columns">
       <div class="column is-one-quarter">
         <el-card shadow="never">
           <div slot="header" class="has-text-centered">
             <!-- <el-avatar  :fit="'fill'" :size="64" :src='topicUser.avatar' /> -->
-            <user-avatar :size="65" :userId="topicUser.userId" :clickable="false"></user-avatar>
+            <user-avatar
+              :size="65"
+              :userId="topicUser.userId"
+              :clickable="false"
+            ></user-avatar>
             <!-- <a-avatar shape="circle" :size="65" :src="topicUser.avatar" /> -->
-            <p class="mt-3"><strong>{{ topicUser.nickName }}</strong></p>
-            <br v-if="!isSelf">
+            <p class="mt-3">
+              <strong>{{ topicUser.nickName }}</strong>
+            </p>
+            <br v-if="!isSelf" />
             <follow-button :authorId="topicUser.userId"></follow-button>
-            <br v-if="!isSelf">
-            <b-button v-if="token && !isSelf" @click="handleCreateChat(topicUser.userId)"
-              type="is-info is-light is-link button-center is-fullwidth">发送消息</b-button>
+            <br v-if="!isSelf" />
+            <b-button
+              v-if="token && !isSelf"
+              @click="handleCreateChat(topicUser.userId)"
+              type="is-info is-light is-link button-center is-fullwidth"
+              >发送消息</b-button
+            >
           </div>
 
           <div>
-            <p class="content">注册日期：{{ dayjs(topicUser.createTime).format("YYYY/MM/DD") }}</p>
+            <p class="content">
+              注册日期：{{ dayjs(topicUser.createTime).format("YYYY/MM/DD") }}
+            </p>
             <p class="content">简介：{{ topicUser.introduce }}</p>
           </div>
         </el-card>
       </div>
 
       <div class="column">
-
         <!-- tabs -->
         <vs-tabs alignment="fixed" style="z-index: 0">
           <!--用户发布的文章-->
-          <vs-tab label="文 章" style="padding: 0;" @click="fetchUserById" icon="article">
-            <el-card style="height: 509.5px; overflow-y: scroll;overflow-x: hidden;">
+          <vs-tab
+            label="文 章"
+            style="padding: 0"
+            @click="fetchUserById"
+            icon="article"
+          >
+            <el-card
+              style="height: 509.5px; overflow-y: scroll; overflow-x: hidden"
+            >
               <!-- 浏览本页面的用户不是已登录用户本人时显示的页面 -->
               <div v-if="!isSelf">
                 <div v-if="loadText != ''">
@@ -42,11 +59,26 @@
                 </div>
 
                 <div v-else class="topicUser-info">
-                  <article v-for="(item, index) in topics" :key="index" class="media">
+                  <article
+                    v-for="(item, index) in topics"
+                    :key="index"
+                    class="media"
+                  >
                     <div class="media-content">
                       <div class="content ellipsis is-ellipsis-1">
-                        <el-tooltip :open-delay="700" class="item" effect="dark" :content="item.title" placement="top">
-                          <router-link :to="{ name: 'post-detail', params: { id: item.articleId } }">
+                        <el-tooltip
+                          :open-delay="700"
+                          class="item"
+                          effect="dark"
+                          :content="item.title"
+                          placement="top"
+                        >
+                          <router-link
+                            :to="{
+                              name: 'post-detail',
+                              params: { id: item.articleId },
+                            }"
+                          >
                             <strong>{{ item.title }}</strong>
                           </router-link>
                         </el-tooltip>
@@ -54,10 +86,18 @@
                       <nav class="level has-text-grey is-size-7">
                         <div class="level-left">
                           <span class="mr-3">
-                            发布时间:{{ dayjs(item.createTime).format("YYYY/MM/DD HH:mm:ss") }}
+                            发布时间:{{
+                              dayjs(item.createTime).format(
+                                "YYYY/MM/DD HH:mm:ss"
+                              )
+                            }}
                           </span>
                           <span class="mr-1">
-                            修改时间:{{ dayjs(item.modifyTime).format("YYYY/MM/DD HH:mm:ss") }}
+                            修改时间:{{
+                              dayjs(item.modifyTime).format(
+                                "YYYY/MM/DD HH:mm:ss"
+                              )
+                            }}
                           </span>
                         </div>
                       </nav>
@@ -82,13 +122,22 @@
                   </article>
                 </div>
                 <!-- 分页 -->
-                <pagination v-show="page.total > 0" class="mt-5" :total="page.total" :page.sync="page.current"
-                  :limit.sync="page.size" @pagination="fetchUserById" />
+                <pagination
+                  v-show="page.total > 0"
+                  class="mt-5"
+                  :total="page.total"
+                  :page.sync="page.current"
+                  :limit.sync="page.size"
+                  @pagination="fetchUserById"
+                />
               </div>
               <!-- 登录用户本人浏览此页面时显示的内容 -->
               <div v-else>
                 <!-- 垂直标签页 -->
-                <a-tabs :default-active-key="defaultOpenKey ?  defaultOpenKey : '1'" tab-position="left">
+                <a-tabs
+                  :default-active-key="defaultOpenKey ? defaultOpenKey : '1'"
+                  tab-position="left"
+                >
                   <!-- 已发布文章 -->
                   <a-tab-pane key="1" :tab="'已发布' + `(${page.total})`">
                     <div v-if="loadText != ''">
@@ -96,16 +145,35 @@
                     </div>
                     <div v-if="topics.length === 0">
                       <el-empty description="暂无文章">
-                        <router-link v-if="topicUser.userId == user.userId" :to="{path: '/post/create'}" style="color: #167df0">点击去发表</router-link>
+                        <router-link
+                          v-if="topicUser.userId == user.userId"
+                          :to="{ path: '/post/create' }"
+                          style="color: #167df0"
+                          >点击去发表</router-link
+                        >
                       </el-empty>
                     </div>
                     <div v-else class="topicUser-info">
-                      <article v-for="(item, index) in topics" :key="index" class="media">
+                      <article
+                        v-for="(item, index) in topics"
+                        :key="index"
+                        class="media"
+                      >
                         <div class="media-content">
                           <div class="content ellipsis is-ellipsis-1">
-                            <el-tooltip :open-delay="700" class="item" effect="dark" :content="item.title"
-                              placement="top">
-                              <router-link :to="{ name: 'post-detail', params: { id: item.articleId } }">
+                            <el-tooltip
+                              :open-delay="700"
+                              class="item"
+                              effect="dark"
+                              :content="item.title"
+                              placement="top"
+                            >
+                              <router-link
+                                :to="{
+                                  name: 'post-detail',
+                                  params: { id: item.articleId },
+                                }"
+                              >
                                 <strong>{{ item.title }}</strong>
                               </router-link>
                             </el-tooltip>
@@ -113,24 +181,44 @@
                           <nav class="level has-text-grey is-size-7">
                             <div class="level-left">
                               <span class="mr-3">
-                                发布时间:{{ dayjs(item.createTime).format("YYYY/MM/DD HH:mm:ss") }}
+                                发布时间:{{
+                                  dayjs(item.createTime).format(
+                                    "YYYY/MM/DD HH:mm:ss"
+                                  )
+                                }}
                               </span>
                               <span class="mr-1">
-                                修改时间:{{ dayjs(item.modifyTime).format("YYYY/MM/DD HH:mm:ss") }}
+                                修改时间:{{
+                                  dayjs(item.modifyTime).format(
+                                    "YYYY/MM/DD HH:mm:ss"
+                                  )
+                                }}
                               </span>
                             </div>
                           </nav>
                         </div>
                         <div class="media-right">
-                          <div v-if="topicUser.account === user.account" class="level">
+                          <div
+                            v-if="topicUser.account === user.account"
+                            class="level"
+                          >
                             <div class="level-item mr-1">
-                              <router-link :to="{ name: 'topic-edit', params: { id: item.articleId } }">
+                              <router-link
+                                :to="{
+                                  name: 'topic-edit',
+                                  params: { id: item.articleId },
+                                }"
+                              >
                                 <span class="tag is-info">编辑</span>
                               </router-link>
                             </div>
                             <div class="level-item">
-                              <a-popconfirm title="确定要删除该文章吗?" ok-text="确认" cancel-text="取消"
-                                @confirm="handleDelete(item.articleId)">
+                              <a-popconfirm
+                                title="确定要删除该文章吗?"
+                                ok-text="确认"
+                                cancel-text="取消"
+                                @confirm="handleDelete(item.articleId)"
+                              >
                                 <a>
                                   <span class="tag is-danger">删除</span>
                                 </a>
@@ -141,31 +229,45 @@
                       </article>
                     </div>
                     <!-- 分页 -->
-                    <pagination v-show="page.total > 0" class="mt-5" :total="page.total" :page.sync="page.current"
-                      :limit.sync="page.size" @pagination="fetchUserById" />
+                    <pagination
+                      v-show="page.total > 0"
+                      class="mt-5"
+                      :total="page.total"
+                      :page.sync="page.current"
+                      :limit.sync="page.size"
+                      @pagination="fetchUserById"
+                    />
                   </a-tab-pane>
                   <!-- 待审核文章 -->
-                  <a-tab-pane key="2" :tab="'待审核' + `(${needReviewArticleCount})`">
+                  <a-tab-pane
+                    key="2"
+                    :tab="'待审核' + `(${needReviewArticleCount})`"
+                  >
                     <div v-if="needReviewArticles.length === 0">
                       <el-empty description="暂无数据">
                         <!-- <a v-if="isSelf" href="/post/create" style="color: blue">点击去发表</a> -->
                       </el-empty>
                     </div>
                     <div v-else class="topicUser-info">
-                      <article v-for="(item, index) in needReviewArticles" :key="index" class="media">
+                      <article
+                        v-for="(item, index) in needReviewArticles"
+                        :key="index"
+                        class="media"
+                      >
                         <div class="media-content">
                           <div class="content ellipsis is-ellipsis-1">
-                            <el-tooltip :open-delay="700" class="item" effect="dark" :content="item.title"
-                              placement="top">
                               <!-- <router-link :to="{ name: 'post-detail', params: { id: item.articleId } }"> -->
-                                <strong>{{ item.title }}</strong>
+                              <strong><article-title :articleId="item.articleId" :tooltip="true"/></strong>
                               <!-- </router-link> -->
-                            </el-tooltip>
                           </div>
                           <nav class="level has-text-grey is-size-7">
                             <div class="level-left">
                               <span class="mr-3">
-                                提交时间:{{ dayjs(item.createTime).format("YYYY/MM/DD HH:mm:ss") }}
+                                提交时间:{{
+                                  dayjs(item.createTime).format(
+                                    "YYYY/MM/DD HH:mm:ss"
+                                  )
+                                }}
                               </span>
                             </div>
                           </nav>
@@ -191,35 +293,54 @@
                     </div>
                   </a-tab-pane>
                   <!-- 已退回文章 -->
-                  <a-tab-pane key="3" :tab="'已退回' + `(${unPassArticleCount})`">
+                  <a-tab-pane
+                    key="3"
+                    :tab="'已退回' + `(${unPassArticleCount})`"
+                  >
                     <div v-if="unPassArticles.length === 0">
                       <el-empty description="暂无数据">
                         <!-- <a v-if="isSelf" href="/post/create" style="color: blue">点击去发表</a> -->
                       </el-empty>
                     </div>
                     <div v-else class="topicUser-info">
-                      <article v-for="(item, index) in unPassArticles" :key="index" class="media">
+                      <article
+                        v-for="(item, index) in unPassArticles"
+                        :key="index"
+                        class="media"
+                      >
                         <div class="media-content">
                           <div class="content ellipsis is-ellipsis-1">
-                            <el-tooltip :open-delay="700" class="item" effect="dark" :content="item.title"
-                              placement="top">
+                            
                               <!-- <router-link :to="{ name: 'post-detail', params: { id: item.articleId } }"> -->
-                                <strong>{{ item.title }}</strong>
+                              <strong><article-title :articleId="item.articleId" :tooltip="true"/></strong>
                               <!-- </router-link> -->
-                            </el-tooltip>
+                            
                           </div>
                           <nav class="level has-text-grey is-size-7">
                             <div class="level-left">
                               <span class="mr-3">
-                                提交时间:{{ dayjs(item.createTime).format("YYYY/MM/DD HH:mm:ss") }}
+                                提交时间:{{
+                                  dayjs(item.createTime).format(
+                                    "YYYY/MM/DD HH:mm:ss"
+                                  )
+                                }}
                               </span>
                             </div>
                           </nav>
                         </div>
                         <div class="media-right">
-                          <div v-if="topicUser.account === user.account" class="level">
+                          <div
+                            v-if="topicUser.account === user.account"
+                            class="level"
+                          >
                             <div class="level-item mr-1">
-                              <router-link :to="{ name: 'topic-edit', params: { id: item.articleId }, query: {reEdit: true} }">
+                              <router-link
+                                :to="{
+                                  name: 'topic-edit',
+                                  params: { id: item.articleId },
+                                  query: { reEdit: true },
+                                }"
+                              >
                                 <span class="tag is-info">重新编辑</span>
                               </router-link>
                             </div>
@@ -238,15 +359,16 @@
                   </a-tab-pane>
                 </a-tabs>
               </div>
-
             </el-card>
           </vs-tab>
 
           <!-- 关注列表 -->
           <vs-tab style="padding: 0" label="关  注" icon="group_work">
-            <el-card >
-              <user-card-list :fetchFunc="fetchF" :userId="topicUser.userId"></user-card-list>
-              
+            <el-card>
+              <user-card-list
+                :fetchFunc="fetchF"
+                :userId="topicUser.userId"
+              ></user-card-list>
             </el-card>
           </vs-tab>
         </vs-tabs>
@@ -256,23 +378,29 @@
 </template>
 
 <script>
-import { getInfo } from '@/api/user'
-import { getFollows } from '@/api/follow'
-import { getInfoByName, deleteTopic, getNeedReviewArticleListByUserId, getUnPassReviewListByUserId } from '@/api/post'
-import pagination from '@/components/Pagination/index'
-import FollowButton from '@/components/Follow/FollowButton'
-import { mapGetters } from 'vuex'
-import store from '@/store'
-import UserAvatar from '@/components/User/Avatar'
-import UserCardList from '../../components/User/UserCardList.vue'
+import { getInfo } from "@/api/user";
+import { getFollows } from "@/api/follow";
+import {
+  getInfoByName,
+  deleteTopic,
+  getNeedReviewArticleListByUserId,
+  getUnPassReviewListByUserId,
+} from "@/api/post";
+import pagination from "@/components/Pagination/index";
+import FollowButton from "@/components/Follow/FollowButton";
+import { mapGetters } from "vuex";
+import store from "@/store";
+import UserAvatar from "@/components/User/Avatar";
+import UserCardList from "../../components/User/UserCardList.vue";
+import ArticleTitle from '../../components/Article/ArticleTitle.vue';
 
 export default {
-  name: 'Profile',
-  components: { pagination, FollowButton, UserAvatar, UserCardList },
+  name: "Profile",
+  components: { pagination, FollowButton, UserAvatar, UserCardList, ArticleTitle },
   data() {
     return {
       topicUser: {
-        userId: -1
+        userId: -1,
       },
       topics: {},
       page: {
@@ -286,7 +414,7 @@ export default {
         total: 0,
       },
       historys: [],
-      loadText: '',
+      loadText: "",
       follows: [],
       isSelf: false,
       needReviewArticles: [],
@@ -294,86 +422,83 @@ export default {
       defaultOpenKey: this.$route.query.articleType,
       needReviewArticleCount: 0,
       unPassArticleCount: 0,
-      fetchF: getFollows
-    }
+      fetchF: getFollows,
+    };
   },
   computed: {
-    ...mapGetters(['token', 'user'])
+    ...mapGetters(["token", "user"]),
   },
   watch: {
     topicUser: function (n, o) {
-      this.isSelf = n.userId == store.getters.user.userId
+      this.isSelf = n.userId == store.getters.user.userId;
     },
-    needReviewArticles: function(n, o) {
-      this.needReviewArticleCount = n.length
+    needReviewArticles: function (n, o) {
+      this.needReviewArticleCount = n.length;
     },
-    unPassArticles: function(n, o) {
-      this.unPassArticleCount = n.length
-    }
+    unPassArticles: function (n, o) {
+      this.unPassArticleCount = n.length;
+    },
   },
   mounted() {
     window.scrollTo(0, 0);
-    this.fetchUserById()
-    this.fetchNeedReviewArticleList()
-    this.fetchUnPassReviewArticleList()
+    this.fetchUserById();
+    this.fetchNeedReviewArticleList();
+    this.fetchUnPassReviewArticleList();
     getInfo(this.$route.params.username).then((res) => {
-      const { data } = res
-      data.avatar += "?" + store.getters.avatarTS
-      this.topicUser = data
+      const { data } = res;
+      data.avatar += "?" + store.getters.avatarTS;
+      this.topicUser = data;
     });
   },
   methods: {
     async fetchUserById() {
-      this.loadText = "加载中..."
-      getInfoByName(this.$route.params.username, this.page.current, this.page.size).then((res) => {
-        const { data } = res
-        this.page.current = data.current
-        this.page.size = data.size
-        this.page.total = data.total
-        this.topics = data.records
-        this.loadText = ''
+      this.loadText = "加载中...";
+      getInfoByName(
+        this.$route.params.username,
+        this.page.current,
+        this.page.size
+      ).then((res) => {
+        const { data } = res;
+        this.page.current = data.current;
+        this.page.size = data.size;
+        this.page.total = data.total;
+        this.topics = data.records;
+        this.loadText = "";
       });
     },
     async fectchUserFollows() {
       getFollows(this.$route.params.username).then((res) => {
-        const { data } = res
-        this.follows = data
-      })
+        const { data } = res;
+        this.follows = data;
+      });
     },
     handleDelete(id) {
-      deleteTopic(id).then(value => {
-        const { code, message } = value
+      deleteTopic(id).then((value) => {
+        const { code, message } = value;
         if (code === 200) {
-          this.msg.success(
-            message
-          )
-          this.fetchUserById()
+          this.msg.success(message);
+          this.fetchUserById();
+        } else {
+          this.msg.error(message, 1500);
         }
-        else {
-          this.msg.error(
-            message,
-            1500
-          )
-        }
-      })
+      });
     },
     handleCreateChat(userId) {
-      this.$router.push({ path: '/message?targetId=' + userId })
+      this.$router.push({ path: "/message?targetId=" + userId });
     },
     async fetchNeedReviewArticleList() {
-      getNeedReviewArticleListByUserId().then(rep => {
-        this.needReviewArticles = rep.data
-      })
+      getNeedReviewArticleListByUserId().then((rep) => {
+        this.needReviewArticles = rep.data;
+      });
     },
     async fetchUnPassReviewArticleList() {
-      getUnPassReviewListByUserId().then(rep => {
-        this.unPassArticles = rep.data
-      })
-    }
-  }
-}
+      getUnPassReviewListByUserId().then((rep) => {
+        this.unPassArticles = rep.data;
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>
-
 </style>

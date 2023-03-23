@@ -96,7 +96,7 @@
             </b-navbar-dropdown>
           </el-badge>
         </b-navbar-item>
-        <b-navbar-item v-if="user.roleIdList && user.roleIdList.includes(1, 0)" tag="router-link" :to="{ path: `/admin` }">
+        <b-navbar-item v-if="user.roleIdList && user.roleIdList.includes('1')" tag="router-link" :to="{ path: `/admin` }">
           🚥 管理页面
         </b-navbar-item>
 
