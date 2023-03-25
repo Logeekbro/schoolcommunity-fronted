@@ -23,7 +23,7 @@ export function getReplyList(commentId, current, size){
         size: size
     }
     return request(({
-        url: `/article/reply/list/`,
+        url: `/article/reply/list`,
         method: "get",
         params: params
     }))
@@ -32,7 +32,7 @@ export function getReplyList(commentId, current, size){
 // 删除回复
 export function deleteReplyById(replyId){
     return request(({
-        url: `/reply/self/`,
+        url: `/reply/self`,
         method: "delete",
         params: {
             replyId: replyId
@@ -43,7 +43,7 @@ export function deleteReplyById(replyId){
 // 获取回复数量
 export function getReplyCount(commentId){
     return request(({
-        url: `/article/reply/count/`,
+        url: `/article/reply/count`,
         method: "get",
         params: {
             commentId: commentId

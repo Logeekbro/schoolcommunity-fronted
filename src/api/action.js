@@ -9,6 +9,13 @@ export function doLike(id) {
     })
 }
 
+export function doUnLike(id) {
+    return request({
+      url: `/${start}/like/article/id/${id}`,
+      method: 'delete'
+    })
+}
+
 export function isLiked(id) {
     return request({
         url: `/${start}/like/check/article/id/${id}`,

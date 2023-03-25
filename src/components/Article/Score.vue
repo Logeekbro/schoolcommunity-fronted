@@ -36,7 +36,7 @@
 <script>
 import store from '@/store'
 import { getLikeCount, getCommentCount, getViewCount } from '@/api/count';
-import { doLike, isLiked, doGuestLike } from '@/api/action'
+import { doLike, isLiked, doGuestLike, doUnLike } from '@/api/action'
 
 export default {
     name: "Score",
@@ -102,7 +102,8 @@ export default {
         },
         handleLike() {
             if (store.getters.token) {
-                doLike(this.trueId).then(rep => {
+                const lf = this.liked ? doUnLike : doLike
+                lf(this.trueId).then(rep => {
                     if (this.liked) {
                         this.likeCount--
                     }
@@ -111,7 +112,7 @@ export default {
                     }
                     this.liked = !this.liked
                 }).catch(error => {
-                    this.msg.error("点赞失败：" + error.message, 1500)
+                    this.msg.error(error.message, 1500)
                 })
             }
             else {

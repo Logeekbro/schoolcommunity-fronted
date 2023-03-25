@@ -378,7 +378,7 @@
 </template>
 
 <script>
-import { getInfo } from "@/api/user";
+import { getOpenInfo } from "@/api/user";
 import { getFollows } from "@/api/follow";
 import {
   getInfoByName,
@@ -444,7 +444,7 @@ export default {
     this.fetchUserById();
     this.fetchNeedReviewArticleList();
     this.fetchUnPassReviewArticleList();
-    getInfo(this.$route.params.username).then((res) => {
+    getOpenInfo(this.$route.params.username).then((res) => {
       const { data } = res;
       data.avatar += "?" + store.getters.avatarTS;
       this.topicUser = data;

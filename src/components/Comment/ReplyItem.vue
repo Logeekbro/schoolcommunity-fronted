@@ -12,7 +12,7 @@
           <a-space>
             <el-tag v-if="reply.userId == authorId" size="mini">作者</el-tag>
             <router-link :to="{ path: `/member/${reply.userId}/home` }">
-              <strong class="ml 2"><nick-name :userId="reply.userId" /></strong>
+              <strong class="ml 2"><nick-name :userId="reply.userId" />:</strong>
             </router-link>
           </a-space>
           <!-- <small class="ml-2">{{ dayjs(reply.createTime).format('YYYY/MM/DD HH:mm') }}</small> -->
